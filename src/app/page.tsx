@@ -849,13 +849,14 @@ export default function GamePage() {
   return (
     <>
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Quicksand:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
           background: #0a0015; overflow: hidden;
           width: 100vw; height: 100vh;
-          font-family: 'Quicksand', sans-serif;
+          font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
           color: white; user-select: none; -webkit-user-select: none;
+          -webkit-font-smoothing: antialiased;
         }
         canvas.layer {
           position: fixed; top: 0; left: 0;
@@ -874,12 +875,12 @@ export default function GamePage() {
         .stage.active { opacity: 1; pointer-events: all; z-index: 30; }
         .stage:not(.active) * { pointer-events: none !important; }
         .btn-magic {
-          font-family: 'Quicksand', sans-serif; font-size: 1.25rem; font-weight: 600;
-          padding: 18px 52px; border: 2px solid #ff69b4;
+          font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.15rem; font-weight: 600;
+          padding: 16px 46px; border: 1.5px solid #ff69b4;
           background: rgba(255,105,180,0.06); color: #ff69b4; border-radius: 50px;
           cursor: pointer; transition: all 0.4s cubic-bezier(.34,1.56,.64,1);
           animation: btnPulse 2.5s ease-in-out infinite;
-          letter-spacing: 1.5px; position: relative; overflow: hidden;
+          letter-spacing: 1.2px; position: relative; overflow: hidden;
           backdrop-filter: blur(10px);
         }
         .btn-magic::before {
@@ -902,17 +903,20 @@ export default function GamePage() {
         .btn-visible { opacity: 1 !important; pointer-events: all !important; transform: translateY(0) !important; position: relative; z-index: 50; }
         
         #stage0 .intro-title {
-          font-family: 'Dancing Script', cursive;
-          font-size: clamp(2.3rem, 5.5vw, 4.4rem); color: #ffb6c1;
-          text-shadow: 0 0 35px rgba(255,182,193,0.5), 0 0 70px rgba(255,105,180,0.3);
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-style: italic;
+          font-size: clamp(2.6rem, 6vw, 4.8rem); color: #ffb6c1;
+          text-shadow: 0 0 35px rgba(255,182,193,0.4), 0 0 70px rgba(255,105,180,0.25);
           margin-bottom: 15px; min-height: 75px; text-align: center; padding: 0 20px;
+          letter-spacing: 0.5px;
         }
         #stage0 .intro-subtitle {
-          font-family: 'Quicksand', sans-serif;
-          font-size: clamp(1rem, 2.2vw, 1.35rem);
-          color: rgba(255, 215, 0, 0.85);
-          text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-          letter-spacing: 3px;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-size: clamp(0.9rem, 2vw, 1.15rem);
+          font-weight: 500;
+          color: rgba(255, 215, 0, 0.9);
+          text-shadow: 0 0 15px rgba(255, 215, 0, 0.35);
+          letter-spacing: 3.5px;
           text-transform: uppercase;
           margin-bottom: 45px;
           opacity: 0;
@@ -924,7 +928,7 @@ export default function GamePage() {
           transform: translateY(0);
         }
         .cursor-blink {
-          display: inline-block; width: 3px; height: 1em;
+          display: inline-block; width: 2px; height: 1em;
           background: #ffb6c1; margin-left: 4px; vertical-align: text-bottom;
           animation: blink 0.8s step-end infinite;
         }
@@ -935,7 +939,8 @@ export default function GamePage() {
         #gameCanvas { pointer-events: none; }
         .star-hud {
           position: absolute; top: 25px; right: 30px;
-          font-size: 1.4rem; color: #ffd700;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-size: 1.25rem; color: #ffd700;
           text-shadow: 0 0 15px rgba(255,215,0,0.5); z-index: 20; font-weight: 600;
           background: rgba(20, 10, 35, 0.6);
           padding: 8px 18px; border-radius: 30px;
@@ -945,12 +950,15 @@ export default function GamePage() {
         .star-msg {
           position: fixed; top: 50%; left: 50%;
           transform: translate(-50%,-50%) scale(0.5);
-          font-family: 'Dancing Script', cursive;
-          font-size: clamp(1.6rem, 3.5vw, 2.6rem); color: #ffd700;
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-style: italic;
+          font-weight: 600;
+          font-size: clamp(1.8rem, 4vw, 2.8rem); color: #ffd700;
           text-shadow: 0 0 30px rgba(255,215,0,0.7), 0 0 50px rgba(255,105,180,0.5);
           opacity: 0; z-index: 30; pointer-events: none;
           text-align: center; white-space: nowrap; transition: none;
           max-width: 90vw;
+          letter-spacing: 0.5px;
         }
         .star-msg.show { animation: msgPop 2.5s ease forwards; }
         @keyframes msgPop {
@@ -962,10 +970,11 @@ export default function GamePage() {
         }
         .game-hint {
           position: absolute; bottom: 35px; left: 50%;
-          transform: translateX(-50%); font-size: 1rem;
-          color: rgba(255,255,255,0.7); z-index: 20; letter-spacing: 2px;
+          transform: translateX(-50%); font-size: 0.95rem;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          color: rgba(255,255,255,0.75); z-index: 20; letter-spacing: 2px;
           background: rgba(10, 0, 25, 0.5);
-          padding: 6px 20px; border-radius: 20px;
+          padding: 7px 22px; border-radius: 20px;
           backdrop-filter: blur(5px);
         }
         
@@ -986,16 +995,20 @@ export default function GamePage() {
           filter: drop-shadow(0 0 12px rgba(255,105,180,0.6));
         }
         .letter-line {
-          font-family: 'Dancing Script', cursive;
-          font-size: clamp(1.15rem, 2.5vw, 1.55rem); line-height: 2.2; color: #ffb6c1;
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-size: clamp(1.25rem, 2.8vw, 1.65rem); line-height: 2.1; color: #ffb6c1;
           opacity: 0; transform: translateY(15px);
           transition: opacity 0.8s ease, transform 0.8s ease;
+          letter-spacing: 0.3px;
         }
         .letter-line.show { opacity: 1; transform: translateY(0); }
-        .letter-line.highlight { color: #ffd700; font-size: clamp(1.35rem, 3vw, 1.85rem); font-weight: 700; }
-        .letter-line.signature-label { color: rgba(255,182,193,0.7); font-size: clamp(1.1rem, 2.2vw, 1.4rem); margin-top: 15px; }
+        .letter-line.highlight { color: #ffd700; font-size: clamp(1.45rem, 3.2vw, 1.95rem); font-weight: 700; }
+        .letter-line.signature-label { color: rgba(255,182,193,0.7); font-size: clamp(1.15rem, 2.4vw, 1.45rem); margin-top: 15px; font-style: italic; }
         .letter-line.signature-name {
-          font-size: clamp(1.5rem, 3.5vw, 2.2rem) !important;
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-weight: 700;
+          font-style: italic;
+          font-size: clamp(1.7rem, 4vw, 2.4rem) !important;
           background: linear-gradient(45deg, #ffd700, #ff69b4, #ff8c00);
           -webkit-background-clip: text;
           background-clip: text;
@@ -1008,8 +1021,9 @@ export default function GamePage() {
         #fwCanvas { pointer-events: none; }
         .fw-hud {
           position: absolute; bottom: 30px; left: 50%;
-          transform: translateX(-50%); font-size: 1rem;
-          color: rgba(255,255,255,0.7); z-index: 20; text-align: center;
+          transform: translateX(-50%); font-size: 0.95rem;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          color: rgba(255,255,255,0.75); z-index: 20; text-align: center;
           background: rgba(10, 0, 25, 0.6);
           padding: 8px 24px; border-radius: 25px;
           backdrop-filter: blur(8px);
@@ -1018,13 +1032,15 @@ export default function GamePage() {
         .sev-text {
           position: fixed; top: 50%; left: 50%;
           transform: translate(-50%,-50%) scale(0);
-          font-family: 'Playfair Display', serif;
-          font-size: clamp(2.8rem, 7.5vw, 5.5rem); font-weight: 900;
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-weight: 700;
+          font-size: clamp(3rem, 8vw, 6rem);
           background: linear-gradient(45deg, #ff6b6b, #ff69b4, #ffd700, #ff69b4);
           background-size: 300% 300%;
           -webkit-background-clip: text; background-clip: text; color: transparent;
           z-index: 25; pointer-events: none; white-space: nowrap; opacity: 0;
           text-shadow: 0 0 40px rgba(255,105,180,0.4);
+          letter-spacing: 2px;
         }
         .sev-text.reveal { animation: sevReveal 3s ease forwards, gradMove 3s ease infinite; }
         @keyframes sevReveal {
@@ -1058,20 +1074,23 @@ export default function GamePage() {
         @keyframes shineMove { 0% { transform: translateX(-80%) translateY(-80%); } 100% { transform: translateX(80%) translateY(80%); } }
         
         .final-title {
-          font-family: 'Dancing Script', cursive;
-          font-size: clamp(2rem, 5vw, 3.5rem); text-align: center;
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-weight: 700;
+          font-size: clamp(2.2rem, 5.5vw, 3.8rem); text-align: center;
           background: linear-gradient(45deg, #ff69b4, #ff6b6b, #ffd700, #ff69b4);
           background-size: 300% 300%;
           -webkit-background-clip: text; background-clip: text; color: transparent;
           animation: gradMove 3s ease infinite;
           opacity: 0; transform: translateY(20px);
           transition: opacity 1.5s ease, transform 1.5s ease; padding: 0 20px;
+          letter-spacing: 0.5px;
         }
         .final-title.show { opacity: 1; transform: translateY(0); }
         
         .final-author {
-          font-family: 'Dancing Script', cursive;
-          font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-style: italic;
+          font-size: clamp(1.5rem, 3.8vw, 2.3rem);
           color: #ffd700;
           text-shadow: 0 0 20px rgba(255,215,0,0.6);
           margin-top: 8px;
@@ -1082,10 +1101,10 @@ export default function GamePage() {
         .final-author.show { opacity: 1; transform: translateY(0); }
         
         .final-sub {
-          font-family: 'Quicksand', sans-serif; font-size: 1.15rem;
+          font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.05rem;
           color: rgba(255,182,193,0.75); margin-top: 10px; opacity: 0;
           transition: opacity 2s ease 1s;
-          letter-spacing: 1px;
+          letter-spacing: 1.5px;
         }
         .final-sub.show { opacity: 1; }
         
