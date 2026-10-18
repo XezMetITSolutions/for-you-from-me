@@ -13,6 +13,7 @@ export default function GamePage() {
   const fxRef = useRef<HTMLCanvasElement>(null);
   const gmRef = useRef<HTMLCanvasElement>(null);
   const fwRef = useRef<HTMLCanvasElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const stateRef = useRef<GameState | null>(null);
 
   interface Particle {
@@ -713,6 +714,14 @@ export default function GamePage() {
     }
     st.animFrame = requestAnimationFrame(gameLoop);
 
+    // Init BGM Audio Element
+    if (!audioRef.current && typeof Audio !== "undefined") {
+      const bgm = new Audio("/audio/bgm.mp3");
+      bgm.loop = true;
+      bgm.volume = 0.55;
+      audioRef.current = bgm;
+    }
+
     // ===== EVENT HANDLERS =====
     const btnStart = document.getElementById("btnStart");
     const btnStartClick = () => {
@@ -721,7 +730,9 @@ export default function GamePage() {
       const audioBtn = document.getElementById("audioBtn");
       if (audioBtn) audioBtn.textContent = "🔊";
       if (st.audioCtx.state === "suspended") st.audioCtx.resume();
-      playMelody(st);
+      if (audioRef.current) {
+        audioRef.current.play().catch(() => {});
+      }
       goToStage(st, 1);
     };
     btnStart?.addEventListener("click", btnStartClick);
@@ -737,9 +748,9 @@ export default function GamePage() {
       if (audioBtn) audioBtn.textContent = st.audioOn ? "🔊" : "🔇";
       if (st.audioOn) {
         if (st.audioCtx.state === "suspended") st.audioCtx.resume();
-        playMelody(st);
+        if (audioRef.current) audioRef.current.play().catch(() => {});
       } else {
-        if (st.melodyTimer) clearTimeout(st.melodyTimer);
+        if (audioRef.current) audioRef.current.pause();
       }
     };
     audioBtn?.addEventListener("click", audioBtnClick);
@@ -841,6 +852,7 @@ export default function GamePage() {
       audioBtn?.removeEventListener("click", audioBtnClick);
       gmCanvas?.removeEventListener("click", onStarClick);
       fwCanvas?.removeEventListener("click", onFwClick);
+      if (audioRef.current) audioRef.current.pause();
       if (st.melodyTimer) clearTimeout(st.melodyTimer);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
