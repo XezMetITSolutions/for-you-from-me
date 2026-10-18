@@ -287,18 +287,18 @@ export default function GamePage() {
         el!.innerHTML = text.substring(0, i + 1) + '<span class="cursor-blink"></span>';
         i++;
         playSfx(st, "letterPop");
-        setTimeout(typeNext, 70 + rand(0, 40));
+        setTimeout(typeNext, 35 + rand(0, 20));
       } else {
         setTimeout(() => {
           el!.innerHTML = text;
           document.getElementById("introSubtitle")?.classList.add("sub-visible");
           setTimeout(() => {
             document.getElementById("btnStart")?.classList.add("btn-visible");
-          }, 400);
-        }, 500);
+          }, 200);
+        }, 250);
       }
     }
-    setTimeout(typeNext, 700);
+    setTimeout(typeNext, 300);
   };
 
   // ===== STAGE 1: STAR GAME =====
@@ -871,7 +871,8 @@ export default function GamePage() {
           z-index: 10; opacity: 0; pointer-events: none;
           transition: opacity 1.2s ease;
         }
-        .stage.active { opacity: 1; pointer-events: all; }
+        .stage.active { opacity: 1; pointer-events: all; z-index: 30; }
+        .stage:not(.active) * { pointer-events: none !important; }
         .btn-magic {
           font-family: 'Quicksand', sans-serif; font-size: 1.25rem; font-weight: 600;
           padding: 18px 52px; border: 2px solid #ff69b4;
@@ -930,7 +931,8 @@ export default function GamePage() {
         @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
         
         #stage1 { cursor: crosshair; }
-        #gameCanvas { z-index: 12; pointer-events: all; }
+        #stage1.active #gameCanvas { z-index: 12; pointer-events: all; }
+        #gameCanvas { pointer-events: none; }
         .star-hud {
           position: absolute; top: 25px; right: 30px;
           font-size: 1.4rem; color: #ffd700;
@@ -1002,7 +1004,8 @@ export default function GamePage() {
         }
         
         #stage3 { cursor: pointer; }
-        #fwCanvas { z-index: 12; pointer-events: all; }
+        #stage3.active #fwCanvas { z-index: 12; pointer-events: all; }
+        #fwCanvas { pointer-events: none; }
         .fw-hud {
           position: absolute; bottom: 30px; left: 50%;
           transform: translateX(-50%); font-size: 1rem;
