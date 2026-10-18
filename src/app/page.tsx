@@ -54,39 +54,41 @@ export default function GamePage() {
     finalInited: boolean;
   }
 
+  // Romantic messages in English from Julian to Gamze
   const starMessages = [
-    "Gülüşün güneş gibi aydınlatıyor her şeyi ☀️",
-    "Gözlerin yıldızlardan bile güzel ✨",
-    "Seninle her an bir masal gibi 🧚‍♀️",
-    "Kalbim sadece senin için atıyor 💓",
-    "Sen benim en güzel şansımsın 🍀",
-    "Dünyalar güzeli Gamze'm 🌍",
-    "Hayatıma anlam katan tek kişi sensin 💫",
+    "Your smile lights up my whole universe, Gamze ☀️",
+    "Out of 8 billion people, my eyes only search for you ✨",
+    "Every heartbeat whispered your name before I even met you 💓",
+    "You are the breathtaking poetry written in the constellations 🌌",
+    "With you, every simple second feels like pure magic 🧚‍♀️",
+    "You didn't just walk into my life, you became my entire world 🌍",
+    "Forever grateful that fate brought me to you, my angel 💫",
   ];
 
   const letterLines = [
-    { text: "Sevgili Gamze'm,", cls: "highlight" },
+    { text: "My Dearest Gamze,", cls: "highlight" },
     { text: "" },
-    { text: "Seni ilk gördüğüm an," },
-    { text: "kalbim durdu ve yeniden çarpmaya başladı." },
+    { text: "From the very first second you entered my world," },
+    { text: "time quietly stood still, and my heart beat with a new rhythm." },
     { text: "" },
-    { text: "Gülüşün, bir bahar sabahının" },
-    { text: "ilk güneş ışığı gibi sıcacık..." },
+    { text: "Your smile is warmer than the first golden rays of dawn," },
+    { text: "so gentle, so rare, turning ordinary moments into pure wonder." },
     { text: "" },
-    { text: "Gözlerin, yıldızları kıskandıran" },
-    { text: "iki harika elmas..." },
+    { text: "Your eyes hold a universe of dreams," },
+    { text: "shining brighter than every star in the midnight sky." },
     { text: "" },
-    { text: "Her geçen gün seni daha çok seviyorum," },
-    { text: "her anımızda biraz daha fazla..." },
+    { text: "With each passing day, I find countless new reasons" },
+    { text: "to fall even deeper in love with you." },
     { text: "" },
-    { text: "Sen benim hayallerimsin," },
-    { text: "gerçeğe dönüşmüş en güzel rüyamsın." },
+    { text: "You are my favorite thought, my deepest peace," },
+    { text: "and the sweetest reality I could ever dream of." },
     { text: "" },
-    { text: "Dünyada ne olursa olsun," },
-    { text: "kalbim hep seninle atacak." },
+    { text: "No matter where life takes us," },
+    { text: "my heart will always beat right beside yours." },
     { text: "" },
-    { text: "Seni çok ama çok seviyorum 💕", cls: "highlight" },
-    { text: "Sonsuza kadar senin... 🌹", cls: "highlight" },
+    { text: "I love you more than words could ever tell... 💕", cls: "highlight" },
+    { text: "Yours truly & forever,", cls: "signature-label" },
+    { text: "Julian Martin 🌹", cls: "highlight signature-name" },
   ];
 
   const fwColors = [
@@ -228,14 +230,14 @@ export default function GamePage() {
   };
 
   const spawnConfetti = (st: GameState, cx: number, cy: number) => {
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 90; i++) {
       const angle = rand(0, Math.PI * 2);
-      const speed = rand(3, 12);
+      const speed = rand(3, 13);
       st.fxParticles.push({
         x: cx, y: cy,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed - 5,
-        size: rand(3, 8),
+        size: rand(3, 9),
         color: ["#ff69b4","#ffd700","#ff6b6b","#87ceeb","#98fb98","#dda0dd","#ff1493","#ffa07a"][randInt(0,7)],
         life: 1, decay: rand(0.003, 0.008),
         type: "confetti",
@@ -277,7 +279,7 @@ export default function GamePage() {
   const startIntro = (st: GameState) => {
     const el = document.getElementById("introTitle");
     if (!el) return;
-    const text = "Gamze İçin Bir Sürpriz... 💫";
+    const text = "A Special Surprise For Gamze... 💫";
     el.innerHTML = "";
     let i = 0;
     function typeNext() {
@@ -285,15 +287,18 @@ export default function GamePage() {
         el!.innerHTML = text.substring(0, i + 1) + '<span class="cursor-blink"></span>';
         i++;
         playSfx(st, "letterPop");
-        setTimeout(typeNext, 70 + rand(0, 50));
+        setTimeout(typeNext, 70 + rand(0, 40));
       } else {
         setTimeout(() => {
           el!.innerHTML = text;
-          document.getElementById("btnStart")?.classList.add("btn-visible");
-        }, 600);
+          document.getElementById("introSubtitle")?.classList.add("sub-visible");
+          setTimeout(() => {
+            document.getElementById("btnStart")?.classList.add("btn-visible");
+          }, 400);
+        }, 500);
       }
     }
-    setTimeout(typeNext, 800);
+    setTimeout(typeNext, 700);
   };
 
   // ===== STAGE 1: STAR GAME =====
@@ -340,11 +345,11 @@ export default function GamePage() {
         line.classList.add("show");
         playSfx(st, "letterPop");
         box.scrollTop = box.scrollHeight;
-      }, 400 + i * 350);
+      }, 400 + i * 360);
     });
     setTimeout(() => {
       document.getElementById("btnLetter")?.classList.add("btn-visible");
-    }, 400 + lines.length * 350 + 500);
+    }, 400 + lines.length * 360 + 600);
   };
 
   // ===== STAGE 3: FIREWORKS =====
@@ -419,7 +424,8 @@ export default function GamePage() {
     }, 800);
 
     setTimeout(() => document.getElementById("finalTitle")?.classList.add("show"), 1500);
-    setTimeout(() => document.getElementById("finalSub")?.classList.add("show"), 2500);
+    setTimeout(() => document.getElementById("finalAuthor")?.classList.add("show"), 2200);
+    setTimeout(() => document.getElementById("finalSub")?.classList.add("show"), 3000);
 
     const orbitEmoji = ["❤️","💖","💕","💗","💓","✨","🌹"];
     orbitEmoji.forEach((emoji, i) => {
@@ -448,7 +454,7 @@ export default function GamePage() {
       if (st.currentStage === 4) {
         spawnConfetti(st, rand(window.innerWidth * 0.2, window.innerWidth * 0.8), rand(0, window.innerHeight * 0.3));
       }
-    }, 5000);
+    }, 4500);
   };
 
   // ===== MAIN EFFECT =====
@@ -843,7 +849,7 @@ export default function GamePage() {
   return (
     <>
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700;900&family=Quicksand:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Quicksand:wght@300;400;600;700&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
           background: #0a0015; overflow: hidden;
@@ -867,36 +873,54 @@ export default function GamePage() {
         }
         .stage.active { opacity: 1; pointer-events: all; }
         .btn-magic {
-          font-family: 'Quicksand', sans-serif; font-size: 1.2rem; font-weight: 600;
-          padding: 16px 48px; border: 2px solid #ff69b4;
-          background: transparent; color: #ff69b4; border-radius: 50px;
+          font-family: 'Quicksand', sans-serif; font-size: 1.25rem; font-weight: 600;
+          padding: 18px 52px; border: 2px solid #ff69b4;
+          background: rgba(255,105,180,0.06); color: #ff69b4; border-radius: 50px;
           cursor: pointer; transition: all 0.4s cubic-bezier(.34,1.56,.64,1);
           animation: btnPulse 2.5s ease-in-out infinite;
-          letter-spacing: 1px; position: relative; overflow: hidden;
+          letter-spacing: 1.5px; position: relative; overflow: hidden;
+          backdrop-filter: blur(10px);
         }
         .btn-magic::before {
           content: ''; position: absolute; top: 50%; left: 50%;
-          width: 0; height: 0; background: rgba(255,105,180,0.15);
+          width: 0; height: 0; background: rgba(255,105,180,0.25);
           border-radius: 50%; transform: translate(-50%,-50%);
           transition: width 0.6s, height 0.6s;
         }
-        .btn-magic:hover::before { width: 300px; height: 300px; }
+        .btn-magic:hover::before { width: 340px; height: 340px; }
         .btn-magic:hover {
           background: #ff69b4; color: #fff;
-          box-shadow: 0 0 40px rgba(255,105,180,0.5), 0 0 80px rgba(255,105,180,0.2);
+          box-shadow: 0 0 45px rgba(255,105,180,0.6), 0 0 90px rgba(255,105,180,0.3);
           transform: scale(1.08); border-color: transparent;
         }
         @keyframes btnPulse {
-          0%,100% { box-shadow: 0 0 15px rgba(255,105,180,0.2); }
-          50% { box-shadow: 0 0 30px rgba(255,105,180,0.5); }
+          0%,100% { box-shadow: 0 0 18px rgba(255,105,180,0.25); }
+          50% { box-shadow: 0 0 35px rgba(255,105,180,0.6); }
         }
         .btn-hidden { opacity: 0; pointer-events: none; transition: opacity 1s ease, transform 0.5s ease; transform: translateY(20px); }
         .btn-visible { opacity: 1 !important; pointer-events: all !important; transform: translateY(0) !important; position: relative; z-index: 50; }
+        
         #stage0 .intro-title {
           font-family: 'Dancing Script', cursive;
-          font-size: clamp(2rem, 5vw, 4rem); color: #ffb6c1;
-          text-shadow: 0 0 30px rgba(255,182,193,0.4), 0 0 60px rgba(255,105,180,0.2);
-          margin-bottom: 50px; min-height: 70px; text-align: center; padding: 0 20px;
+          font-size: clamp(2.3rem, 5.5vw, 4.4rem); color: #ffb6c1;
+          text-shadow: 0 0 35px rgba(255,182,193,0.5), 0 0 70px rgba(255,105,180,0.3);
+          margin-bottom: 15px; min-height: 75px; text-align: center; padding: 0 20px;
+        }
+        #stage0 .intro-subtitle {
+          font-family: 'Quicksand', sans-serif;
+          font-size: clamp(1rem, 2.2vw, 1.35rem);
+          color: rgba(255, 215, 0, 0.85);
+          text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          margin-bottom: 45px;
+          opacity: 0;
+          transform: translateY(12px);
+          transition: opacity 1s ease, transform 1s ease;
+        }
+        #stage0 .intro-subtitle.sub-visible {
+          opacity: 1;
+          transform: translateY(0);
         }
         .cursor-blink {
           display: inline-block; width: 3px; height: 1em;
@@ -904,21 +928,27 @@ export default function GamePage() {
           animation: blink 0.8s step-end infinite;
         }
         @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+        
         #stage1 { cursor: crosshair; }
         #gameCanvas { z-index: 12; pointer-events: all; }
         .star-hud {
           position: absolute; top: 25px; right: 30px;
           font-size: 1.4rem; color: #ffd700;
-          text-shadow: 0 0 15px rgba(255,215,0,0.4); z-index: 20; font-weight: 600;
+          text-shadow: 0 0 15px rgba(255,215,0,0.5); z-index: 20; font-weight: 600;
+          background: rgba(20, 10, 35, 0.6);
+          padding: 8px 18px; border-radius: 30px;
+          border: 1px solid rgba(255,215,0,0.3);
+          backdrop-filter: blur(8px);
         }
         .star-msg {
           position: fixed; top: 50%; left: 50%;
           transform: translate(-50%,-50%) scale(0.5);
           font-family: 'Dancing Script', cursive;
-          font-size: clamp(1.4rem, 3vw, 2.2rem); color: #ffd700;
-          text-shadow: 0 0 25px rgba(255,215,0,0.6);
+          font-size: clamp(1.6rem, 3.5vw, 2.6rem); color: #ffd700;
+          text-shadow: 0 0 30px rgba(255,215,0,0.7), 0 0 50px rgba(255,105,180,0.5);
           opacity: 0; z-index: 30; pointer-events: none;
           text-align: center; white-space: nowrap; transition: none;
+          max-width: 90vw;
         }
         .star-msg.show { animation: msgPop 2.5s ease forwards; }
         @keyframes msgPop {
@@ -930,49 +960,68 @@ export default function GamePage() {
         }
         .game-hint {
           position: absolute; bottom: 35px; left: 50%;
-          transform: translateX(-50%); font-size: 0.95rem;
-          color: rgba(255,255,255,0.4); z-index: 20; letter-spacing: 2px;
+          transform: translateX(-50%); font-size: 1rem;
+          color: rgba(255,255,255,0.7); z-index: 20; letter-spacing: 2px;
+          background: rgba(10, 0, 25, 0.5);
+          padding: 6px 20px; border-radius: 20px;
+          backdrop-filter: blur(5px);
         }
+        
         .letter-wrap { perspective: 1000px; }
         .letter-container {
-          width: min(600px, 90vw); max-height: 65vh;
+          width: min(620px, 92vw); max-height: 68vh;
           background: linear-gradient(145deg, rgba(26,10,46,0.95), rgba(45,27,78,0.95));
-          border: 1px solid rgba(255,182,193,0.25); border-radius: 24px;
+          border: 1px solid rgba(255,182,193,0.3); border-radius: 26px;
           padding: clamp(25px,5vw,50px);
-          box-shadow: 0 0 50px rgba(255,105,180,0.15), inset 0 0 30px rgba(255,105,180,0.05);
-          overflow-y: auto; position: relative; backdrop-filter: blur(10px);
+          box-shadow: 0 0 55px rgba(255,105,180,0.2), inset 0 0 35px rgba(255,105,180,0.06);
+          overflow-y: auto; position: relative; backdrop-filter: blur(12px);
           animation: letterFloat 4s ease-in-out infinite;
         }
         @keyframes letterFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         .letter-container::before {
           content: '💌'; position: absolute; top: -25px; left: 50%;
-          transform: translateX(-50%); font-size: 2.5rem;
-          filter: drop-shadow(0 0 10px rgba(255,105,180,0.5));
+          transform: translateX(-50%); font-size: 2.6rem;
+          filter: drop-shadow(0 0 12px rgba(255,105,180,0.6));
         }
         .letter-line {
           font-family: 'Dancing Script', cursive;
-          font-size: clamp(1.1rem, 2.5vw, 1.5rem); line-height: 2.2; color: #ffb6c1;
+          font-size: clamp(1.15rem, 2.5vw, 1.55rem); line-height: 2.2; color: #ffb6c1;
           opacity: 0; transform: translateY(15px);
           transition: opacity 0.8s ease, transform 0.8s ease;
         }
         .letter-line.show { opacity: 1; transform: translateY(0); }
-        .letter-line.highlight { color: #ffd700; font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 700; }
+        .letter-line.highlight { color: #ffd700; font-size: clamp(1.35rem, 3vw, 1.85rem); font-weight: 700; }
+        .letter-line.signature-label { color: rgba(255,182,193,0.7); font-size: clamp(1.1rem, 2.2vw, 1.4rem); margin-top: 15px; }
+        .letter-line.signature-name {
+          font-size: clamp(1.5rem, 3.5vw, 2.2rem) !important;
+          background: linear-gradient(45deg, #ffd700, #ff69b4, #ff8c00);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent !important;
+          text-shadow: 0 0 25px rgba(255,215,0,0.4);
+        }
+        
         #stage3 { cursor: pointer; }
         #fwCanvas { z-index: 12; pointer-events: all; }
         .fw-hud {
           position: absolute; bottom: 30px; left: 50%;
-          transform: translateX(-50%); font-size: 0.95rem;
-          color: rgba(255,255,255,0.45); z-index: 20; text-align: center;
+          transform: translateX(-50%); font-size: 1rem;
+          color: rgba(255,255,255,0.7); z-index: 20; text-align: center;
+          background: rgba(10, 0, 25, 0.6);
+          padding: 8px 24px; border-radius: 25px;
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(255,105,180,0.3);
         }
         .sev-text {
           position: fixed; top: 50%; left: 50%;
           transform: translate(-50%,-50%) scale(0);
           font-family: 'Playfair Display', serif;
-          font-size: clamp(3rem, 8vw, 6rem); font-weight: 900;
+          font-size: clamp(2.8rem, 7.5vw, 5.5rem); font-weight: 900;
           background: linear-gradient(45deg, #ff6b6b, #ff69b4, #ffd700, #ff69b4);
           background-size: 300% 300%;
           -webkit-background-clip: text; background-clip: text; color: transparent;
           z-index: 25; pointer-events: none; white-space: nowrap; opacity: 0;
+          text-shadow: 0 0 40px rgba(255,105,180,0.4);
         }
         .sev-text.reveal { animation: sevReveal 3s ease forwards, gradMove 3s ease infinite; }
         @keyframes sevReveal {
@@ -981,19 +1030,20 @@ export default function GamePage() {
           100% { opacity:1; transform:translate(-50%,-50%) scale(1) rotate(0deg); }
         }
         @keyframes gradMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .photo-container { position: relative; margin-bottom: 35px; }
+        
+        .photo-container { position: relative; margin-bottom: 25px; }
         .photo-glow {
           position: absolute; top: -20px; left: -20px; right: -20px; bottom: -20px;
           border-radius: 30px;
-          background: radial-gradient(circle, rgba(255,105,180,0.3) 0%, transparent 70%);
+          background: radial-gradient(circle, rgba(255,105,180,0.35) 0%, transparent 70%);
           animation: glowPulse 3s ease-in-out infinite; z-index: -1;
         }
         @keyframes glowPulse { 0%,100% { opacity:0.5; transform:scale(1); } 50% { opacity:1; transform:scale(1.05); } }
         .photo-frame {
-          width: clamp(200px, 35vw, 300px); height: clamp(260px, 45vw, 380px);
-          border-radius: 20px; overflow: hidden;
-          border: 3px solid rgba(255,182,193,0.4);
-          box-shadow: 0 0 50px rgba(255,105,180,0.4), 0 20px 60px rgba(0,0,0,0.3);
+          width: clamp(210px, 35vw, 310px); height: clamp(270px, 45vw, 390px);
+          border-radius: 22px; overflow: hidden;
+          border: 3px solid rgba(255,182,193,0.5);
+          box-shadow: 0 0 55px rgba(255,105,180,0.45), 0 20px 60px rgba(0,0,0,0.4);
           transform-style: preserve-3d; transition: transform 0.15s ease-out; position: relative;
         }
         .photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -1003,9 +1053,10 @@ export default function GamePage() {
           animation: shineMove 4s ease-in-out infinite; pointer-events: none;
         }
         @keyframes shineMove { 0% { transform: translateX(-80%) translateY(-80%); } 100% { transform: translateX(80%) translateY(80%); } }
+        
         .final-title {
           font-family: 'Dancing Script', cursive;
-          font-size: clamp(1.8rem, 4.5vw, 3.2rem); text-align: center;
+          font-size: clamp(2rem, 5vw, 3.5rem); text-align: center;
           background: linear-gradient(45deg, #ff69b4, #ff6b6b, #ffd700, #ff69b4);
           background-size: 300% 300%;
           -webkit-background-clip: text; background-clip: text; color: transparent;
@@ -1014,35 +1065,51 @@ export default function GamePage() {
           transition: opacity 1.5s ease, transform 1.5s ease; padding: 0 20px;
         }
         .final-title.show { opacity: 1; transform: translateY(0); }
+        
+        .final-author {
+          font-family: 'Dancing Script', cursive;
+          font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+          color: #ffd700;
+          text-shadow: 0 0 20px rgba(255,215,0,0.6);
+          margin-top: 8px;
+          opacity: 0;
+          transform: translateY(15px);
+          transition: opacity 1.5s ease, transform 1.5s ease;
+        }
+        .final-author.show { opacity: 1; transform: translateY(0); }
+        
         .final-sub {
-          font-family: 'Quicksand', sans-serif; font-size: 1.1rem;
-          color: rgba(255,182,193,0.6); margin-top: 12px; opacity: 0;
+          font-family: 'Quicksand', sans-serif; font-size: 1.15rem;
+          color: rgba(255,182,193,0.75); margin-top: 10px; opacity: 0;
           transition: opacity 2s ease 1s;
+          letter-spacing: 1px;
         }
         .final-sub.show { opacity: 1; }
+        
         .heart-orbit {
-          position: absolute; font-size: 1.5rem;
+          position: absolute; font-size: 1.6rem;
           animation: orbit 6s linear infinite; pointer-events: none;
         }
         @keyframes orbit {
-          from { transform: rotate(0deg) translateX(180px) rotate(0deg); }
-          to { transform: rotate(360deg) translateX(180px) rotate(-360deg); }
+          from { transform: rotate(0deg) translateX(190px) rotate(0deg); }
+          to { transform: rotate(360deg) translateX(190px) rotate(-360deg); }
         }
+        
         .audio-btn {
           position: fixed; top: 15px; left: 15px; z-index: 100;
-          background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
-          color: white; width: 42px; height: 42px; border-radius: 50%;
-          cursor: pointer; font-size: 1.1rem;
+          background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+          color: white; width: 44px; height: 44px; border-radius: 50%;
+          cursor: pointer; font-size: 1.2rem;
           display: flex; align-items: center; justify-content: center;
-          transition: all 0.3s; backdrop-filter: blur(5px);
+          transition: all 0.3s; backdrop-filter: blur(8px);
         }
-        .audio-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.1); }
+        .audio-btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
         .flash {
           position: fixed; top: 0; left: 0; width: 100%; height: 100%;
           background: white; z-index: 50; opacity: 0; pointer-events: none;
         }
         .flash.fire { animation: flashAnim 0.4s ease-out; }
-        @keyframes flashAnim { 0% { opacity: 0.3; } 100% { opacity: 0; } }
+        @keyframes flashAnim { 0% { opacity: 0.35; } 100% { opacity: 0; } }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,105,180,0.3); border-radius: 3px; }
@@ -1057,14 +1124,15 @@ export default function GamePage() {
       <canvas id="bgCanvas" className="layer" ref={bgRef} />
       <canvas id="fxCanvas" className="layer" style={{ zIndex: 5 }} ref={fxRef} />
 
-      <button className="audio-btn" id="audioBtn" title="Ses Aç/Kapat">🔇</button>
+      <button className="audio-btn" id="audioBtn" title="Toggle Sound">🔇</button>
       <div className="flash" id="flash" />
       <div className="transition-overlay" id="transOverlay" />
 
       {/* STAGE 0: INTRO */}
       <div id="stage0" className="stage active">
         <div className="intro-title" id="introTitle" />
-        <button className="btn-magic btn-hidden" id="btnStart">Hazır mısın? 💖</button>
+        <div className="intro-subtitle" id="introSubtitle">Crafted with endless love by Julian Martin</div>
+        <button className="btn-magic btn-hidden" id="btnStart">Are you ready, Gamze? 💖</button>
       </div>
 
       {/* STAGE 1: STAR GAME */}
@@ -1072,7 +1140,7 @@ export default function GamePage() {
         <canvas id="gameCanvas" className="layer" style={{ zIndex: 12 }} ref={gmRef} />
         <div className="star-hud">⭐ <span id="starCount">0</span> / 7</div>
         <div className="star-msg" id="starMsg" />
-        <div className="game-hint">✨ Yıldızlara tıkla ve yakala ✨</div>
+        <div className="game-hint">✨ Click on the falling stars to catch them ✨</div>
       </div>
 
       {/* STAGE 2: LOVE LETTER */}
@@ -1080,14 +1148,14 @@ export default function GamePage() {
         <div className="letter-wrap">
           <div className="letter-container" id="letterBox" />
         </div>
-        <button className="btn-magic btn-hidden" id="btnLetter" style={{ marginTop: 30 }}>Devam Et 🌹</button>
+        <button className="btn-magic btn-hidden" id="btnLetter" style={{ marginTop: 30 }}>Continue 🌹</button>
       </div>
 
       {/* STAGE 3: FIREWORKS */}
       <div id="stage3" className="stage">
         <canvas id="fwCanvas" className="layer" style={{ zIndex: 12 }} ref={fwRef} />
-        <div className="fw-hud">🎆 Ekrana tıklayarak havai fişek patlat! &nbsp; <span id="fwCount">0</span> / 12</div>
-        <div className="sev-text" id="sevText">SENİ SEVİYORUM ❤️</div>
+        <div className="fw-hud">🎆 Tap anywhere on the screen for fireworks! &nbsp; <span id="fwCount">0</span> / 12</div>
+        <div className="sev-text" id="sevText">I LOVE YOU GAMZE ❤️</div>
       </div>
 
       {/* STAGE 4: FINAL */}
@@ -1099,8 +1167,9 @@ export default function GamePage() {
             <div className="shine" />
           </div>
         </div>
-        <div className="final-title" id="finalTitle">Seni Çok Seviyorum Gamze 💖</div>
-        <div className="final-sub" id="finalSub">Sonsuza kadar seninle... 💫</div>
+        <div className="final-title" id="finalTitle">I Love You Beyond Words, Gamze 💖</div>
+        <div className="final-author" id="finalAuthor">— Forever Yours, Julian Martin 🌹</div>
+        <div className="final-sub" id="finalSub">Together through every star, across infinity... 💫</div>
       </div>
     </>
   );
