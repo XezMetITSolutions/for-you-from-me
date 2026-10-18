@@ -412,6 +412,53 @@ export default function GamePage() {
   };
 
   // ===== STAGE 4: FINAL =====
+  const photoList = [
+    { src: "/photos/photo1.jpg", caption: "The moment my whole world paused for you ✨" },
+    { src: "/photos/photo2.jpg", caption: "Your pure radiance outshines the universe 💖" },
+    { src: "/photos/photo3.jpg", caption: "Every heartbeat feels warmer by your side 🌸" },
+    { src: "/photos/photo4.jpg", caption: "My favorite smile in the entire world ☀️" },
+    { src: "/photos/photo5.jpg", caption: "With you, every small second is unforgettable 🌹" },
+    { src: "/photos/photo6.jpg", caption: "The gentle magic in your eyes 💫" },
+    { src: "/photos/photo7.jpg", caption: "Precious memories engraved in my soul 💕" },
+    { src: "/photos/photo8.jpg", caption: "You are the poetry I always wanted to write 🕊️" },
+    { src: "/photos/photo9.jpg", caption: "Forever captivated by your beauty 💎" },
+    { src: "/photos/photo10.jpg", caption: "My greatest blessing, my sweetest reality 🍀" },
+    { src: "/photos/photo11.jpg", caption: "Every chapter with you is a fairytale 👑" },
+  ];
+
+  let currentPhotoIdx = 0;
+  let photoSlideInterval: ReturnType<typeof setInterval> | null = null;
+
+  const showPhoto = (idx: number) => {
+    currentPhotoIdx = (idx + photoList.length) % photoList.length;
+    const img = document.getElementById("mainPhoto") as HTMLImageElement | null;
+    const caption = document.getElementById("photoCaption");
+    const counter = document.getElementById("photoCounter");
+    const thumbs = document.querySelectorAll(".photo-thumb");
+
+    if (img) {
+      img.style.opacity = "0";
+      setTimeout(() => {
+        img.src = photoList[currentPhotoIdx].src;
+        img.style.opacity = "1";
+      }, 250);
+    }
+    if (caption) {
+      caption.style.opacity = "0";
+      setTimeout(() => {
+        caption.textContent = photoList[currentPhotoIdx].caption;
+        caption.style.opacity = "1";
+      }, 250);
+    }
+    if (counter) {
+      counter.textContent = `${currentPhotoIdx + 1} / ${photoList.length}`;
+    }
+    thumbs.forEach((th, i) => {
+      if (i === currentPhotoIdx) th.classList.add("active");
+      else th.classList.remove("active");
+    });
+  };
+
   const startFinal = (st: GameState) => {
     if (st.finalInited) return;
     st.finalInited = true;
@@ -424,9 +471,35 @@ export default function GamePage() {
       playSfx(st, "reveal");
     }, 800);
 
-    setTimeout(() => document.getElementById("finalTitle")?.classList.add("show"), 1500);
-    setTimeout(() => document.getElementById("finalAuthor")?.classList.add("show"), 2200);
-    setTimeout(() => document.getElementById("finalSub")?.classList.add("show"), 3000);
+    setTimeout(() => document.getElementById("finalTitle")?.classList.add("show"), 1200);
+    setTimeout(() => document.getElementById("finalAuthor")?.classList.add("show"), 1800);
+    setTimeout(() => document.getElementById("finalGallery")?.classList.add("show"), 2400);
+    setTimeout(() => document.getElementById("finalSub")?.classList.add("show"), 3200);
+
+    showPhoto(0);
+
+    // Auto slideshow every 5s
+    photoSlideInterval = setInterval(() => {
+      if (st.currentStage === 4) {
+        showPhoto(currentPhotoIdx + 1);
+      }
+    }, 5000);
+
+    // Attach Prev / Next / Thumbnail controls
+    document.getElementById("btnPrevPhoto")?.addEventListener("click", () => {
+      if (photoSlideInterval) clearInterval(photoSlideInterval);
+      showPhoto(currentPhotoIdx - 1);
+    });
+    document.getElementById("btnNextPhoto")?.addEventListener("click", () => {
+      if (photoSlideInterval) clearInterval(photoSlideInterval);
+      showPhoto(currentPhotoIdx + 1);
+    });
+    document.querySelectorAll(".photo-thumb").forEach((th, i) => {
+      th.addEventListener("click", () => {
+        if (photoSlideInterval) clearInterval(photoSlideInterval);
+        showPhoto(i);
+      });
+    });
 
     const orbitEmoji = ["❤️","💖","💕","💗","💓","✨","🌹"];
     orbitEmoji.forEach((emoji, i) => {
@@ -1062,7 +1135,27 @@ export default function GamePage() {
         }
         @keyframes gradMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         
-        .photo-container { position: relative; margin-bottom: 25px; }
+        .final-gallery {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-top: 15px;
+          margin-bottom: 10px;
+          opacity: 0;
+          transform: translateY(15px);
+          transition: opacity 1.2s ease, transform 1.2s ease;
+          max-width: 95vw;
+        }
+        .final-gallery.show {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .photo-container {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
         .photo-glow {
           position: absolute; top: -20px; left: -20px; right: -20px; bottom: -20px;
           border-radius: 30px;
@@ -1071,24 +1164,124 @@ export default function GamePage() {
         }
         @keyframes glowPulse { 0%,100% { opacity:0.5; transform:scale(1); } 50% { opacity:1; transform:scale(1.05); } }
         .photo-frame {
-          width: clamp(210px, 35vw, 310px); height: clamp(270px, 45vw, 390px);
+          width: clamp(230px, 34vw, 320px); height: clamp(280px, 42vw, 390px);
           border-radius: 22px; overflow: hidden;
-          border: 3px solid rgba(255,182,193,0.5);
-          box-shadow: 0 0 55px rgba(255,105,180,0.45), 0 20px 60px rgba(0,0,0,0.4);
+          border: 2px solid rgba(255,182,193,0.5);
+          box-shadow: 0 0 50px rgba(255,105,180,0.35), 0 20px 60px rgba(0,0,0,0.5);
           transform-style: preserve-3d; transition: transform 0.15s ease-out; position: relative;
+          background: #150a22;
         }
-        .photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .photo-frame img {
+          width: 100%; height: 100%; object-fit: cover; display: block;
+          transition: opacity 0.3s ease;
+        }
         .photo-frame .shine {
           position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
           background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.08) 45%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.08) 55%, transparent 60%);
           animation: shineMove 4s ease-in-out infinite; pointer-events: none;
         }
         @keyframes shineMove { 0% { transform: translateX(-80%) translateY(-80%); } 100% { transform: translateX(80%) translateY(80%); } }
+
+        .gallery-nav-btn {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          background: rgba(20, 10, 35, 0.75);
+          border: 1px solid rgba(255, 105, 180, 0.4);
+          color: #ffb6c1;
+          width: 44px; height: 44px;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.3rem;
+          transition: all 0.3s;
+          backdrop-filter: blur(8px);
+          z-index: 25;
+        }
+        .gallery-nav-btn:hover {
+          background: rgba(255, 105, 180, 0.3);
+          color: #fff;
+          transform: translateY(-50%) scale(1.15);
+          box-shadow: 0 0 20px rgba(255, 105, 180, 0.6);
+        }
+        .gallery-nav-btn.prev { left: -60px; }
+        .gallery-nav-btn.next { right: -60px; }
+
+        @media (max-width: 600px) {
+          .gallery-nav-btn.prev { left: 10px; }
+          .gallery-nav-btn.next { right: 10px; }
+        }
+
+        .photo-info-bar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: clamp(230px, 34vw, 320px);
+          margin-top: 12px;
+          padding: 0 4px;
+        }
+        .photo-caption {
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          font-style: italic;
+          font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+          color: #ffd700;
+          text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+          transition: opacity 0.3s ease;
+          flex: 1;
+          text-align: left;
+        }
+        .photo-counter {
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-size: 0.85rem;
+          color: rgba(255, 182, 193, 0.8);
+          background: rgba(255, 105, 180, 0.15);
+          border: 1px solid rgba(255, 105, 180, 0.3);
+          padding: 3px 10px;
+          border-radius: 12px;
+          margin-left: 10px;
+          white-space: nowrap;
+        }
+
+        .thumbnails-scroll {
+          display: flex;
+          gap: 10px;
+          margin-top: 14px;
+          padding: 6px 10px;
+          max-width: 90vw;
+          overflow-x: auto;
+          scrollbar-width: thin;
+        }
+        .photo-thumb {
+          width: 52px;
+          height: 62px;
+          border-radius: 10px;
+          overflow: hidden;
+          cursor: pointer;
+          opacity: 0.5;
+          border: 2px solid transparent;
+          transition: all 0.3s ease;
+          flex-shrink: 0;
+        }
+        .photo-thumb:hover {
+          opacity: 0.85;
+          transform: translateY(-3px);
+        }
+        .photo-thumb.active {
+          opacity: 1;
+          border-color: #ffd700;
+          box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+          transform: scale(1.08);
+        }
+        .photo-thumb img {
+          width: 100%; height: 100%; object-fit: cover;
+        }
         
         .final-title {
           font-family: 'Cormorant Garamond', Georgia, serif;
           font-weight: 700;
-          font-size: clamp(2.2rem, 5.5vw, 3.8rem); text-align: center;
+          font-size: clamp(2rem, 5vw, 3.2rem); text-align: center;
           background: linear-gradient(45deg, #ff69b4, #ff6b6b, #ffd700, #ff69b4);
           background-size: 300% 300%;
           -webkit-background-clip: text; background-clip: text; color: transparent;
@@ -1102,10 +1295,10 @@ export default function GamePage() {
         .final-author {
           font-family: 'Cormorant Garamond', Georgia, serif;
           font-style: italic;
-          font-size: clamp(1.5rem, 3.8vw, 2.3rem);
+          font-size: clamp(1.3rem, 3.2vw, 1.9rem);
           color: #ffd700;
           text-shadow: 0 0 20px rgba(255,215,0,0.6);
-          margin-top: 8px;
+          margin-top: 4px;
           opacity: 0;
           transform: translateY(15px);
           transition: opacity 1.5s ease, transform 1.5s ease;
@@ -1113,8 +1306,8 @@ export default function GamePage() {
         .final-author.show { opacity: 1; transform: translateY(0); }
         
         .final-sub {
-          font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.05rem;
-          color: rgba(255,182,193,0.75); margin-top: 10px; opacity: 0;
+          font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.95rem;
+          color: rgba(255,182,193,0.75); margin-top: 8px; opacity: 0;
           transition: opacity 2s ease 1s;
           letter-spacing: 1.5px;
         }
@@ -1194,15 +1387,39 @@ export default function GamePage() {
 
       {/* STAGE 4: FINAL */}
       <div id="stage4" className="stage">
-        <div className="photo-container" id="photoCont">
-          <div className="photo-glow" />
-          <div className="photo-frame" id="photoFrame">
-            <img src="/img/gamze.jpg" alt="Gamze 💖" />
-            <div className="shine" />
-          </div>
-        </div>
         <div className="final-title" id="finalTitle">I Love You Beyond Words, Gamze 💖</div>
         <div className="final-author" id="finalAuthor">— Forever Yours, Julian Martin 🌹</div>
+
+        <div className="final-gallery" id="finalGallery">
+          <div className="photo-container" id="photoCont">
+            <div className="photo-glow" />
+            <button className="gallery-nav-btn prev" id="btnPrevPhoto" title="Previous Memory">❮</button>
+            <div className="photo-frame" id="photoFrame">
+              <img id="mainPhoto" src="/photos/photo1.jpg" alt="Gamze Memory 💖" />
+              <div className="shine" />
+            </div>
+            <button className="gallery-nav-btn next" id="btnNextPhoto" title="Next Memory">❯</button>
+          </div>
+
+          <div className="photo-info-bar">
+            <div className="photo-caption" id="photoCaption">The moment my whole world paused for you ✨</div>
+            <div className="photo-counter" id="photoCounter">1 / 11</div>
+          </div>
+
+          {/* Interactive Thumbnails Ribbon */}
+          <div className="thumbnails-scroll">
+            {photoList.map((p, idx) => (
+              <div
+                key={idx}
+                className={`photo-thumb ${idx === 0 ? "active" : ""}`}
+                title={`Memory ${idx + 1}`}
+              >
+                <img src={p.src} alt={`Thumb ${idx + 1}`} />
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="final-sub" id="finalSub">Together through every star, across infinity... 💫</div>
       </div>
     </>
